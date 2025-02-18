@@ -92,6 +92,9 @@ new Text({
 
 [Controller](https://ui5.sap.com/#/topic/e5c58fe81fed4d31988be6899c1188e7)
 
+[Modules](https://ui5.sap.com/#/topic/3510034eb6274fd8a8fb7d65c2f1aa46)
+
+
 Key takeaways:
 
 1. Views
@@ -125,4 +128,57 @@ Normally, it is defined by the **controllerName**.
 
 ```typescript
 import MessageToast from "sap/m/MessageToast";
+```
+
+# Step 7. JSON model
+
+[JSON model](https://ui5.sap.com/#/topic/cfbbeab4e4b74124abac98ce268a0aba)
+
+[Translatable Texts](https://ui5.sap.com/#/topic/4dcf52e0ca3048e3a08bfdccfc440442)
+
+Key takeaways:    
+
+1. Create JSONModel in the controller
+```typescript
+const dataModel = new JSONModel(data);
+```
+
+2. Using `setModel` to bind the model to view
+
+```typescript
+this.getView()?.setModel(dataModel);
+```
+
+3. Translatable text located in `webapp/i18n/i18n.properties`
+
+```
+showHelloButtonText=Say Hello
+helloMsg=Hello {0}
+```
+4. Using `ResourceModel` for i18n
+
+```typescript
+import ResourceModel from "sap/ui/model/resource/ResourceModel";
+import ResourceBundle from "sap/base/i18n/ResourceBundle";
+```
+
+And also use `setModel` to bind the resourse model:
+
+```typescript
+// set i18n model on view
+const i18nModel = new ResourceModel({
+    bundleName: "ui5-ts-demo.i18n.i18n"
+});
+this.getView()?.setModel(i18nModel, "i18n");
+```
+
+The bundle name **ui5-ts-demo.i18n.i18n** consists of the application namespace **ui5-ts-demo** (the application root as defined in the *index.html*), the resource folder name **i18n**, and finally the base file name **i18n** *without extension*. The SAPUI5 runtime calculates the correct path to the resource, to which *.properties* is then appended.
+
+5. Read message for i18n Model
+
+```typescript
+// read msg from i18n model
+const recipient = (this.getView()?.getModel() as JSONModel)?.getProperty("/recipient/name");
+const resourceBundle = (this.getView()?.getModel("i18n") as ResourceModel)?.getResourceBundle() as ResourceBundle;
+const msg = resourceBundle.getText("helloMsg", [recipient]) || "no text defined";
 ```

@@ -5,10 +5,16 @@
    <Text text="Hello World"/>
 
    <Button
-      text="Say Hello"
+      text="{i18n>showHelloButtonText}"
       press=".onShowHello"/>
    <Button
       text="Say Hello with MessageToast"
       press=".onShowHelloMessageToast"/>
+
+   <Input
+      value="{/recipient/name}"
+      description="Hello {/recipient/name}"
+      valueLiveUpdate="true"
+      width="60%"/>
 
 </mvc:View>
