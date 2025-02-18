@@ -40,7 +40,23 @@ ui5 use SAPUI5
 ui5 add sap.ui.core themelib_sap_horizon
 ```
 
-4. Update ui5.yaml
+4. Add the bootstrap logic with script in *index.html*.
+
+```html
+<script
+  id="sap-ui-bootstrap"
+  src="resources/sap-ui-core.js"
+  data-sap-ui-theme="sap_horizon"
+  data-sap-ui-compat-version="edge"
+  data-sap-ui-async="true"
+  data-sap-ui-on-init="module:ui5-ts-demo/index"
+  data-sap-ui-resource-roots='{
+    "ui5-ts-demo": "./"
+  }'>
+</script>
+```
+
+5. Update ui5.yaml
 
 ```yml
 builder:
@@ -76,7 +92,7 @@ Key takeaway:
 ui5 add sap.m
 ```
 
-3. Add controls into the view.
+3. Add controls into the view with *index.ts*.
 
 ```typescript
 import Text from "sap/m/Text";
@@ -128,6 +144,18 @@ Normally, it is defined by the **controllerName**.
 
 ```typescript
 import MessageToast from "sap/m/MessageToast";
+```
+
+5. Initialize the app by creating the view in *index.ts*:
+
+```typescript
+import XMLView from "sap/ui/core/mvc/XMLView";
+
+XMLView.create({
+    viewName: "ui5.walkthrough.view.App"
+}).then(function (view) {
+    view.placeAt("content");
+});
 ```
 
 # Step 7. JSON model
@@ -182,3 +210,63 @@ const recipient = (this.getView()?.getModel() as JSONModel)?.getProperty("/recip
 const resourceBundle = (this.getView()?.getModel("i18n") as ResourceModel)?.getResourceBundle() as ResourceBundle;
 const msg = resourceBundle.getText("helloMsg", [recipient]) || "no text defined";
 ```
+
+# Step 9. Component Configuration
+
+[Component Configuration](https://ui5.sap.com/#/topic/f9d0e2fcd2134ff7923fcdcba8bded96)
+
+Key takeaway:    
+1. File *component.ts* is known as **component controller**. A **component** is organized in a unique namespace (which is synonymous with the application namespace). All required and optional resources of the component have to be organized in the namespace of the component.
+
+2. Normally Component defined to extend UIComponent with additional metadata. Normally we specify the interface *IAsyncContentCreation* (see codes below), it allows the component to be generated asynchronously , which in turn sets the component's rootView and router configuration to async. 
+
+3. When the *component* is instantiated, SAPUI5 automatically calls the **init** function (ensure call to the **super.init**) of the component. Finanlly it call the **createContent** hook method of the component which creates the content (UI control tree) of this component.
+
+```typescript
+export default class Component extends UIComponent {
+  public static metadata = {
+    "interfaces": ["sap.ui.core.IAsyncContentCreation"]
+  };
+  init(): void {
+    // call the init function of the parent
+    super.init();
+    // Other codes...
+  }
+  createContent(): Control | Promise<Control | null> | null {
+    return XMLView.create({
+      "viewName": "ui5-test-demo.view.App",
+      "id": "app"
+    });
+  };
+}
+```
+
+4. With the **Component** class, the controller class now changed to read the Model from the component via `this.getView().getModel()`:  
+
+```typescript
+onShowHello(): void {
+  // read msg from i18n model
+  const recipient = (<JSONModel> this.getView()?.getModel())?.getProperty("/recipient/name");
+  const resourceBundle = <ResourceBundle> (<ResourceModel> this.getView()?.getModel("i18n"))?.getResourceBundle();
+  const msg = resourceBundle.getText("helloMsg", [recipient]) || "no text defined";
+}
+```
+
+5. With the **Component**, the view will be created by Component class. So the initialize logic (*index.ts*) shall use Component instead of create View manually.
+
+```typescript
+import ComponentContainer from "sap/ui/core/ComponentContainer";
+
+new ComponentContainer({
+    id: "container",
+    name: "ui5-test-demo",
+    settings: {
+        id: "walkthrough"
+    },
+    autoPrefixId: true,
+    async: true
+}).placeAt("content");
+```
+
+6. The *component* is named *Component.ts*. Together with all UI assets of the app, the component is located in the *webapp* folder. The `index.html` file is located in the *webapp* folder if it is used productively.
+

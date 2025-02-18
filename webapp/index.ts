@@ -1,7 +1,11 @@
-import XMLView from "sap/ui/core/mvc/XMLView";
+import ComponentContainer from "sap/ui/core/ComponentContainer";
 
-XMLView.create({
-    viewName: "ui5-ts-demo.view.App"
-}).then(function (view) {
-    view.placeAt("content");
-});
+new ComponentContainer({
+    id: "container",
+    name: "ui5-ts-demo",
+    settings: {
+        id: "walkthrough"
+    },
+    autoPrefixId: true,
+    async: true
+}).placeAt("content");
