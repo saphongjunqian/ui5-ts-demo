@@ -85,3 +85,44 @@ new Text({
     text: "Hello World"
 }).placeAt("content");
 ```
+
+# Step 4. Add View and Controllers
+
+[Views](https://ui5.sap.com/#/topic/6c66ed843c5e4b18aacf6c5e52246e4d)
+
+[Controller](https://ui5.sap.com/#/topic/e5c58fe81fed4d31988be6899c1188e7)
+
+Key takeaways:
+
+1. Views
+
+View names are **capitalized**;  
+All views are stored in the *view* folder;   
+Names of XML views always end with *.view.xml;   
+XML namespaces are declared in the root element of the view. As a general rule, the default XML namespace is sap.m;    
+Other XML namespaces use the last part of the SAP namespace as alias (for example, mvc for sap.ui.core.mvc);   
+
+2. Controllers
+
+Controller names are **capitalized**;     
+All controllers are stored in the *controller* folder;    
+Controllers carry the same name as the related view (if there is a 1:1 relationship);   
+Event handlers are prefixed with on;    
+Controller names always end with *.controller.js (in JavaScript) or *.controller.ts (in TypeScript);    
+
+
+3. Linkage between View and Controllers
+
+Normally, it is defined by the **controllerName**.
+
+```xml
+<mvc:View
+   xmlns="sap.m"
+   controllerName="ui5-ts-demo.controller.App">
+```
+
+4. Using the MessageToast via Controller
+
+```typescript
+import MessageToast from "sap/m/MessageToast";
+```

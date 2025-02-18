@@ -1,0 +1,14 @@
+<mvc:View
+   xmlns="sap.m"
+   controllerName="ui5-ts-demo.controller.App"
+   xmlns:mvc="sap.ui.core.mvc">
+   <Text text="Hello World"/>
+
+   <Button
+      text="Say Hello"
+      press=".onShowHello"/>
+   <Button
+      text="Say Hello with MessageToast"
+      press=".onShowHelloMessageToast"/>
+
+</mvc:View>
