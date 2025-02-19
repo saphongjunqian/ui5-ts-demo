@@ -270,3 +270,42 @@ new ComponentContainer({
 
 6. The *component* is named *Component.ts*. Together with all UI assets of the app, the component is located in the *webapp* folder. The `index.html` file is located in the *webapp* folder if it is used productively.
 
+# Step 10. Descriptor for Applications 
+
+[Descriptor for Applications](https://ui5.sap.com/#/topic/2a46b7567a73457c81b1b67741146063)
+
+
+Key takeaways:
+1. All application-specific configuration settings will be put in a separate descriptor file called *manifest.json*.
+2. The manifest file is used by SAPUI5 to instantiate the component, and it is suit for launchpad for navigation purpose.
+Namespace `sap.app` defines the application information.
+Namespace `sap.ui` used for UI-specific attributes, the main attribtues are `technology` and `deviceType (mandatory)`.
+Namespace `sap.ui5` addes SAPUI5-specific configuration parameters. The most important parameters are `dependencies (mandatory)` (including `minUI5Version` and `libs`), `rootView`, `models`.
+3. The *component* class will specify the metadata and remove ResourceModel model and createContent method:
+```javascript
+export default class Component extends UIComponent {
+  public static metadata = {
+    "interfaces": ["sap.ui.core.IAsyncContentCreation"],
+    "manifest": "json" 
+  };
+}
+```
+4. Change the script in *index.html* to suit *manifest*.
+```html
+	<script
+		id="sap-ui-bootstrap"
+		src="resources/sap-ui-core.js"
+		data-sap-ui-theme="sap_horizon"
+		data-sap-ui-compat-version="edge"
+		data-sap-ui-async="true"
+		data-sap-ui-on-init="module:sap/ui/core/ComponentSupport"
+		data-sap-ui-resource-roots='{
+			"ui5.walkthrough": "./"
+		}'>
+	</script>
+</head>
+<body class="sapUiBody" id="content">
+	<div data-sap-ui-component data-name="ui5.walkthrough" data-id="container" data-settings='{"id" : "walkthrough"}'></div>
+</body>
+```
+
