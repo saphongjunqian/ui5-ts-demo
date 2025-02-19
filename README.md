@@ -342,7 +342,7 @@ Key takeaways:
 ```
 3. Instead of manually adding CSS to the controls, UI5 uses the standard classes.
 
-Some useful pre-defined CSS class:
+Some useful pre-defined CSS class:   
 - *sapUiResponsiveMargin* will add some space around the pane/control.
 - *sapUiSmallMarginEnd* will add small space at the end of the control.
 - *sapUiSmallMargin* will add small space around the panel/control.
@@ -363,5 +363,35 @@ Some useful pre-defined CSS class:
 	  ]
 	}
 }
+```
+
+# Step 15. Nested Views, Dialogs and Fragments, and ICONs
+
+[Nested Views](https://ui5.sap.com/#/topic/9bbbfaa828a14fee8ca9ac31464cc073)
+
+[Dialogs and Fragments](https://ui5.sap.com/#/topic/4b2e306f4bcd4777b068e5a99e007e85) 
+
+[Fragment Callbacks](https://ui5.sap.com/#/topic/f030afccc30f461c9660724561cb7264)
+
+[Icons](https://ui5.sap.com/#/topic/49b1ac6f768947769d3daa9baf807f31)
+
+
+Key takeaways:
+1. Using following XML syntax to embed one view into another.
+
+```xml
+<mvc:XMLView viewName="ui5-ts-demo.view.MyPanel"/>
+```
+2. The linkage between controller and view is `controllerName`.
+3. Fragments are **light-weight** UI parts which can be reused *but do not have any controller*. A fragment can consist of 1 to n controls. At runtime, fragments placed in a view behave similiar to 'normal' view content which means the controls inside the fragment will be included into view's DOM when rendered. 
+4. The callback function in the fragment will be defined the controller who calls *loadFragment*.
+5. Icon in the button can be used with syntax *icon="sap-icon://world"*.
+6. Another ICON usage is added to Dialog:
+```xml
+<Dialog>
+  <content>
+    <core:Icon src="sap-icon://hello-world" size="8rem" class="sapUiMediumMargin"/>
+  </content>
+</Dialog>
 ```
 
