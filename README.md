@@ -291,6 +291,7 @@ export default class Component extends UIComponent {
 }
 ```
 4. Change the script in *index.html* to suit *manifest*.
+
 ```html
 	<script
 		id="sap-ui-bootstrap"
@@ -307,5 +308,60 @@ export default class Component extends UIComponent {
 <body class="sapUiBody" id="content">
 	<div data-sap-ui-component data-name="ui5.walkthrough" data-id="container" data-settings='{"id" : "walkthrough"}'></div>
 </body>
+```
+
+# Step 11. Pages and Panels, Shell, Margins and Paddings
+
+[Pages and Panels](https://ui5.sap.com/#/topic/feed6135dbcf4ba38bdd5a3c68fbedcc)
+
+[Shell](https://ui5.sap.com/#/topic/4af44cb310124baa8d38c23a909ef5a2)
+
+[Margins and Paddings](https://ui5.sap.com/#/topic/5826c0c2e47c4507ba0eeb26332c33a2)
+
+[Customer CSS and styles](https://ui5.sap.com/#/topic/4cc841e27fd44549b9d108ed7c333195)
+
+Key takeaways:
+
+1. A *shell* control as container and use it as new root element. The *shell* takes care of visual adaptation of the application to the device's screen size by introducing a so-called letterbox on desktop screens.
+2. The HTML tag hierarchy:   
+```html
+<Shell>
+  <App>
+    <pages>
+      <Page title="{i18n>homePageTitle}">
+        <content>
+          <Panel headerText="{i18n>helloPanelTitle}">
+            <content>
+            </content>
+          </Panel>
+        </content>
+      </Page>
+    </pages>
+  </App>
+</Shell>
+```
+3. Instead of manually adding CSS to the controls, UI5 uses the standard classes.
+
+Some useful pre-defined CSS class:
+- *sapUiResponsiveMargin* will add some space around the pane/control.
+- *sapUiSmallMarginEnd* will add small space at the end of the control.
+- *sapUiSmallMargin* will add small space around the panel/control.
+
+4. For customer CSS, defined in a `css` folder add then add it to `manifest.json` under `resources` node:
+
+```json
+ "sap.ui5": {
+	...	
+	"rootView": {
+	  ...
+	},
+	"resources": {
+	  "css": [
+		{
+		  "uri": "css/style.css"
+		}
+	  ]
+	}
+}
 ```
 
