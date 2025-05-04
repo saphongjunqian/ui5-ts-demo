@@ -5,6 +5,7 @@
             <Page title="{i18n>homePageTitle}">
                   <content>
 						   <mvc:XMLView viewName="ui5-ts-demo.view.MyPanel"/>
+                     <mvc:XMLView viewName="ui5-ts-demo.view.InvoiceList"/>
 					   </content>
                </Page>
          </pages>

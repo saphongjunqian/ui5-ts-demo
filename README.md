@@ -395,3 +395,37 @@ Key takeaways:
 </Dialog>
 ```
 
+# Step 19. Aggregation Binding
+
+[Aggregation Binding](https://ui5.sap.com/#/topic/24580fb89258491db986482f4ed45e47)
+
+[Data Types](https://ui5.sap.com/#/topic/0dad01aa741c49508b74082dd9f8c9af)
+
+[Expression Binding](https://ui5.sap.com/#/topic/8d67ba2cc18c484fa529de855596982a)
+
+
+Key takeaways:   
+1. Any files needed for creating models and the logic relating to model data are stored in the **model** folder. This includes grouping, filtering, and formatting data.
+2. Model file names are lowercased.
+3. For a *named* model, need prefix each binding definition with the *{model_name}* identifier followed by the **>** symbol.   
+4. The *aggregation binding* means binding to a list.   
+5. A typical example of 'Data Type' and 'Express Binding' (an expression binding has to be escaped with the **$** sign) is displaying currency with the amount.   
+```xml
+ <ObjectListItem
+  core:require="{
+    Currency: 'sap/ui/model/type/Currency'
+  }"
+  title="{invoice>Quantity} x {invoice>ProductName}"
+  number="{
+    parts: [
+      'invoice>ExtendedPrice',
+      'view>/currency'
+    ],
+    type: 'Currency',
+    formatOptions: {
+      showMeasure: false
+    }
+  }"
+  numberUnit="{view>/currency}"
+  numberState="{= ${invoice>ExtendedPrice} > 50 ? 'Error' : 'Success' }" />
+```
