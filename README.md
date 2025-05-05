@@ -490,3 +490,59 @@ export default  {
 </ObjectListItem>
 ```
 
+
+# Step 23. Filtering
+
+[Filtering](https://ui5.sap.com/#/topic/7f02e9d71b0f41749a4e5df2b73cb2dd)
+
+[Sorting and Grouping](https://ui5.sap.com/#/topic/86bbe132b9924c8496b70824af94a209)   
+
+
+Key takeaways:    
+1. To enable **Filter** on Table, the event handler with an event of type **SearchField$SearchEvent** as import parameter.    
+```typescript
+import { SearchField$SearchEvent } from "sap/m/SearchField";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
+import ListBinding from "sap/ui/model/ListBinding";
+```   
+2. The implementation logic for **Filter** as following:   
+  - The search field defines a parameter *query* that can be accessed by calling *getParameter("query")* on the event parameter.   
+  - If the query is not empty, then add a new *filter object* that searches in the *relevant field* for a given query string with filter operator **Contains**. The filter operator **FilterOperator.Contains** is not case-sensitive.    
+  - To get the instance of the list control with the ID *"invoiceList"*. To achieve this, use the helper function **byId** (ensure add the `ID` on the List control). On the list control, access the binding of the items aggregation to filter it with our newly constructed *filter object*. This will automatically filter the list by our search string, so that only the matching items are shown when the search is triggered.    
+  - If the query is empty, filter the binding with an empty array. This makes sure that we see all list elements again. We could also add more filters to the array if we wanted to search more than one data field.   
+```typescript
+  onFilterInvoices(event: SearchField$SearchEvent): void {
+    // build filter array
+    const filter = [];
+    const query = event.getParameter("query");
+    if (query) {
+      filter.push(new Filter("ProductName", FilterOperator.Contains, query));
+    }
+    // filter binding
+    const list = this.byId("invoiceList");
+    const binding = list?.getBinding("items") as ListBinding;
+    binding?.filter(filter);
+  }    
+```    
+3. To enable the **Sort** in List control, specify the `path` of `sorter` in the binding syntax.    
+```xml
+<List id="invoiceList" class="sapUiResponsiveMargin" width="auto"
+      items="{
+        path : 'invoice>/Invoices',
+        sorter : {
+          path : 'ProductName' 
+        }
+      }" >
+```    
+4. To enable the **Group** in List control, specify the `group` of `sorter` in the binding syntax.    
+```xml
+<List id="invoiceList" class="sapUiResponsiveMargin" width="auto"
+      items="{
+        path : 'invoice>/Invoices',
+        sorter : {
+          path : 'ShipperName',
+          group: true 
+        }
+      }" >
+```    
