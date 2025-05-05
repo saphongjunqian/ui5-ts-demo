@@ -411,7 +411,7 @@ Key takeaways:
 4. The *aggregation binding* means binding to a list.   
 5. A typical example of 'Data Type' and 'Express Binding' (an expression binding has to be escaped with the **$** sign) is displaying currency with the amount.   
 ```xml
- <ObjectListItem
+<ObjectListItem
   core:require="{
     Currency: 'sap/ui/model/type/Currency'
   }"
@@ -429,3 +429,64 @@ Key takeaways:
   numberUnit="{view>/currency}"
   numberState="{= ${invoice>ExtendedPrice} > 50 ? 'Error' : 'Success' }" />
 ```
+
+
+# Step 22. Customer Formatter
+
+[Customer Formatter](https://ui5.sap.com/#/topic/61d4e2b154a7449da198577dfbc75a22)
+
+Key takeaways:    
+1. Define the formatter into **model** folder, for example *formatter.ts* file:    
+```typescript
+import ResourceBundle from "sap/base/i18n/ResourceBundle";
+import Controller from "sap/ui/core/mvc/Controller";
+import ResourceModel from "sap/ui/model/resource/ResourceModel";
+
+export default  {
+  statusText: function (this: Controller, status: string): string | undefined {
+    const resourceBundle = (this?.getOwnerComponent()?.getModel("i18n") as ResourceModel)?.getResourceBundle() as ResourceBundle;
+    switch (status) {
+      case "A":
+        return resourceBundle.getText("invoiceStatusA");
+      case "B":
+        return resourceBundle.getText("invoiceStatusB");
+      case "C":
+        return resourceBundle.getText("invoiceStatusC");
+      default:
+        return status;
+    }
+  }
+};
+```
+2. To load *formatter* functions, use the **require** attribute with the *sap.ui.core* namespace. An example:    
+```xml
+<ObjectListItem
+  core:require="{
+    Currency: 'sap/ui/model/type/Currency'
+  }"
+  title="{invoice>Quantity} x {invoice>ProductName}"
+  number="{
+    parts: [
+      'invoice>ExtendedPrice',
+      'view>/currency'
+    ],
+    type: 'Currency',
+    formatOptions: {
+      showMeasure: false
+    }
+  }"
+  numberUnit="{view>/currency}"
+  numberState="{= ${invoice>ExtendedPrice} > 50 ? 'Error' : 'Success' }" />
+  <firstStatus>
+    <ObjectStatus
+      core:require="{
+        Formatter: 'ui5-ts-demo/model/formatter'
+      }"
+      text="{
+        path: 'invoice>Status',
+        formatter: 'Formatter.statusText.bind($controller)'
+      }"/>
+  </firstStatus> 
+</ObjectListItem>
+```
+

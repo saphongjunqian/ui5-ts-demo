@@ -1,6 +1,7 @@
 <mvc:View
    controllerName="ui5-ts-demo.controller.InvoiceList"
    xmlns="sap.m"
+   xmlns:core="sap.ui.core"
    xmlns:mvc="sap.ui.core.mvc">
    <List headerText="{i18n>invoiceListTitle}" class="sapUiResponsiveMargin" width="auto" items="{invoice>/Invoices}" >
       <items>
@@ -16,7 +17,18 @@
                }
             }"
             numberUnit="{view>/currency}" 
-            numberState="{= ${invoice>ExtendedPrice} > 50 ? 'Error' : 'Success' }" />
+            numberState="{= ${invoice>ExtendedPrice} > 50 ? 'Error' : 'Success' }">
+            <firstStatus>
+               <ObjectStatus
+                  core:require="{
+                     Formatter: 'ui5-ts-demo/model/formatter'
+                  }"
+                  text="{
+                     path: 'invoice>Status',
+                     formatter: 'Formatter.statusText.bind($controller)'
+                  }"/>
+            </firstStatus>
+         </ObjectListItem>
       </items>
    </List>
 </mvc:View>
