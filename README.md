@@ -7,13 +7,13 @@ This repository is a learning track of [UI5 Walkthrough Tutorial (TypeScript)](h
 [Documentation](https://ui5.sap.com/#/topic/c20489e2a59d46e99c83f0510392cb6c)
 
 Key takeaway:   
-1. Install UI5 CLI (both globally and devdependency).
-```
+1. Install UI5 CLI (both globally and devdependency).   
+```cmd
 npm install --global @ui5/cli
 ```
 
-2. Initial the UI5, generate a `ui5.yaml` file.
-```
+2. Initial the UI5, generate a `ui5.yaml` file.   
+```cmd
 ui5 init
 ```
 
@@ -25,18 +25,18 @@ This repo use SAPUI5 instead of OpenUI5.
 
 Key takeaway:   
 
-1. Install UI5 middlewares
-```
+1. Install UI5 middlewares    
+```cmd
 npm install ui5-middleware-livereload ui5-middleware-serveframework ui5-tooling-transpile --save-dev
 ```
 
-2. Specify the UI5 framework
-```
+2. Specify the UI5 framework     
+```cmd
 ui5 use SAPUI5
 ```
 
-3. Add UI5 libraries
-```
+3. Add UI5 libraries    
+```cmd
 ui5 add sap.ui.core themelib_sap_horizon
 ```
 
@@ -88,7 +88,7 @@ Key takeaway:
 
 2. Add `sap.m` library:
 
-```
+```cmd
 ui5 add sap.m
 ```
 
@@ -166,7 +166,7 @@ XMLView.create({
 
 Key takeaways:    
 
-1. Create JSONModel in the controller
+1. Create JSONModel in the controller    
 ```typescript
 const dataModel = new JSONModel(data);
 ```
@@ -491,7 +491,7 @@ export default  {
 ```
 
 
-# Step 23. Filtering
+# Step 23. Filtering, Sorting and Grouping
 
 [Filtering](https://ui5.sap.com/#/topic/7f02e9d71b0f41749a4e5df2b73cb2dd)
 
@@ -546,3 +546,61 @@ import ListBinding from "sap/ui/model/ListBinding";
         }
       }" >
 ```    
+
+# Step 25. Remote OData Service
+
+[Remote OData Service](https://ui5.sap.com/#/topic/b68d3219ed82404e8cbafb1c6f443cb4)
+
+
+Key takeaways:   
+1. Install the proxy as middleware.    
+```cmd
+npm i -D ui5-middleware-simpleproxy
+```   
+2. Configure the `ui5.yaml` to enable the proxy (add `ui5-middleware-simpleproxy` between `ui5-middleware-serveframework` and `ui5-middleware-livereload`).    
+```yaml
+server:
+  customMiddleware:
+  - name: ui5-tooling-transpile-middleware
+    afterMiddleware: compression
+  - name: ui5-middleware-serveframework
+    afterMiddleware: compression
+  - name: ui5-middleware-simpleproxy
+    afterMiddleware: compression
+    mountPath: /V2
+    configuration:
+      baseUri: "https://services.odata.org"
+  - name: ui5-middleware-livereload
+    afterMiddleware: compression
+```   
+3. Update `manifest.json` to add new Data Source:    
+```json
+{
+  "sap.app": {
+		...,
+		"dataSources": {
+			"invoiceRemote": {
+				"uri": "V2/Northwind/Northwind.svc/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0"
+				}
+			}
+		}
+	},
+  ...
+	"sap.ui5": {
+		...
+		"models": {
+			...
+			"invoice": {
+				"dataSource": "invoiceRemote"
+			}
+		}
+		...  
+  }
+}
+```
+
+
+ 

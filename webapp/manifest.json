@@ -14,7 +14,16 @@
     "description": "{{appDescription}}",
     "applicationVersion": {
       "version": "1.0.0"
-    }
+    },
+    "dataSources": {
+			"invoiceRemote": {
+				"uri": "V2/Northwind/Northwind.svc/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0"
+				}
+			}
+		}    
   },
   "sap.ui": {
     "technology": "UI5",
@@ -25,6 +34,10 @@
     }
   },
   "sap.ui5": {
+    "contentDensities": {
+      "compact": false,
+      "cozy": false
+    },
     "dependencies": {
       "minUI5Version": "1.131",
       "libs": {
@@ -49,8 +62,7 @@
         }
       },
       "invoice": {
-        "type": "sap.ui.model.json.JSONModel",
-        "uri": "model/localInvoices.json"
+        "dataSource": "invoiceRemote"
       }
     }
   }
