@@ -602,5 +602,93 @@ server:
 }
 ```
 
+# Step 26. Mock Server Configuration
+
+[Mock Server Configuration](https://ui5.sap.com/#/topic/3e1c64fd34e247afaf468a92414ed722)    
+
+Key takeaways:    
+1. Add following **folder** and **files** under folder **webapp**.      
+
+|Path|Type|Description|
+|--|--|-----|
+|\localService|Folder||
+|\localService\mockserver.ts|File|Typescript File which defined the logic to initialize the mock server.|
+|\localService\metadata.xml|File|Metadata file, normally fetch from the real service.|
+|\localService\mockdata|Folder||
+|\localService\mockdata\EntitySet.json|File|JSON file contains the mock data, ensure the file name matching the EntitySet.|
+|\test|Folder||
+|\test\initMockServer.ts|File|Consume the mock server initialization as well as UI app initialization.|
+|\test\mockServer.html|File|Entrance HTML file which will launch application in test mode|
+
+2. An example of *\localService\mockserver.ts*:    
+```typescript
+import MockServer from "sap/ui/core/util/MockServer";
+				
+export default {
+  init: function () {
+    // create
+    const mockServer = new MockServer({
+      rootUri: sap.ui.require.toUrl("ui5-ts-demo/V2/Northwind/Northwind.svc/")
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // configure mock server with a delay
+    MockServer.config({
+      autoRespond: true,
+      autoRespondAfter: parseInt(urlParams.get("serverDelay") || "500")
+    });
+
+    // simulate
+    const path = sap.ui.require.toUrl("ui5-ts-demo/localService");
+    mockServer.simulate(path + "/metadata.xml", path + "/mockdata");
+
+    // start
+    mockServer.start();
+  }
+};
+```   
+
+3. An example of *\test\initMockServer.ts*.    
+```typescript
+import mockserver from "../localService/mockserver";
+
+// initialize the mock server
+mockserver.init();
+
+// initialize the embedded component on the HTML page
+import("sap/ui/core/ComponentSupport");
+```
+
+4. An example of *\test\mockServer.html*.    
+```html
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>SAPUI5 UI5 Walkthrough - Mockserver Test Page</title>
+	<script
+		id="sap-ui-bootstrap"
+		src="../resources/sap-ui-core.js"
+		data-sap-ui-theme="sap_horizon"
+		data-sap-ui-compat-version="edge"
+		data-sap-ui-async="true"
+		data-sap-ui-on-init="module:ui5-test-demo/test/initMockServer"
+		data-sap-ui-resource-roots='{
+			"ui5-test-demo": "../"
+		}'>
+	</script>
+</head>
+<body class="sapUiBody" id="content">
+	<div data-sap-ui-component data-name="ui5-test-demo" data-id="container" data-settings='{"id" : "ui5-test-demo"}'></div>
+
+</body>
+</html>
+```
+
+5. Run it with following command:    
+```cmd
+ui5 serve -o test/mockServer.html
+```
 
  
