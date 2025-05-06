@@ -673,15 +673,14 @@ import("sap/ui/core/ComponentSupport");
 		data-sap-ui-theme="sap_horizon"
 		data-sap-ui-compat-version="edge"
 		data-sap-ui-async="true"
-		data-sap-ui-on-init="module:ui5-test-demo/test/initMockServer"
+		data-sap-ui-on-init="module:ui5-ts-demo/test/initMockServer"
 		data-sap-ui-resource-roots='{
-			"ui5-test-demo": "../"
+			"ui5-ts-demo": "../"
 		}'>
 	</script>
 </head>
 <body class="sapUiBody" id="content">
-	<div data-sap-ui-component data-name="ui5-test-demo" data-id="container" data-settings='{"id" : "ui5-test-demo"}'></div>
-
+	<div data-sap-ui-component data-name="ui5-ts-demo" data-id="container" data-settings='{"id" : "ui5-ts-demo"}'></div>
 </body>
 </html>
 ```
